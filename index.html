@@ -4,54 +4,263 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
 
-<body>
-    <form action="/" method="post">
-        <label for="CityInput">City Name:</label>
-        <input type="text" name="CityName" id="CityInput">
-        <button type="submit">Go</button>
-    </form>
+        .container {
+            width: 100%;
+            max-width: 460px;
+            padding: 20px;
+        }
 
-<style>
-        body{
-    padding: 0;
-    margin: 0;
-    background-image: linear-gradient(to left,black,rgb(156, 246, 246));
-    box-sizing: border-box;
-    color: white;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-.section{
-    padding-top: 100px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-}
-form{
-    display: flex;
-    height: 300px;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    font-size: 25px;
-    font-weight: bold;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    padding-top: 100px;
-    
-}
-input{
-    
-    font-size: 30px;
-    border: 3px solid rgb(105, 239, 188);
-    border-radius: 10px;
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            padding: 40px 36px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+        }
 
+        .app-title {
+            text-align: center;
+            margin-bottom: 32px;
+        }
 
-}
+        .app-title .icon {
+            font-size: 52px;
+            display: block;
+            margin-bottom: 10px;
+            animation: float 3s ease-in-out infinite;
+        }
 
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .app-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(90deg, #a8edea, #fed6e3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .app-title p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.5);
+            margin-top: 4px;
+            font-weight: 300;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            opacity: 0.5;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 16px 20px 16px 48px;
+            font-size: 16px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 400;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            color: white;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]::placeholder {
+            color: rgba(255,255,255,0.35);
+        }
+
+        input[type="text"]:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(168, 237, 234, 0.6);
+            box-shadow: 0 0 0 4px rgba(168, 237, 234, 0.1);
+        }
+
+        button[type="submit"] {
+            padding: 16px;
+            font-size: 16px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            color: #1a1a2e;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 237, 234, 0.3);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(0px);
+        }
+
+        /* Weather result section */
+        .weather-result {
+            margin-top: 28px;
+            text-align: center;
+            display: none;
+        }
+
+        .weather-result.show {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            margin-bottom: 24px;
+        }
+
+        .city-name {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .weather-desc {
+            font-size: 14px;
+            color: rgba(255,255,255,0.5);
+            text-transform: capitalize;
+            margin-bottom: 20px;
+        }
+
+        .temp-display {
+            font-size: 72px;
+            font-weight: 700;
+            line-height: 1;
+            background: linear-gradient(90deg, #a8edea, #fed6e3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 24px;
+        }
+
+        .weather-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .weather-stat {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            padding: 14px;
+            text-align: left;
+        }
+
+        .weather-stat .label {
+            font-size: 12px;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 4px;
+            font-weight: 300;
+        }
+
+        .weather-stat .value {
+            font-size: 18px;
+            font-weight: 600;
+        }
     </style>
- </body>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="app-title">
+                <span class="icon">⛅</span>
+                <h1>Weather App</h1>
+                <p>Real-time weather for any city</p>
+            </div>
+
+            <form action="/" method="post">
+                <div class="input-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input
+                        type="text"
+                        name="CityName"
+                        id="CityInput"
+                        placeholder="Enter city name..."
+                        autocomplete="off"
+                    >
+                </div>
+                <button type="submit">Get Weather →</button>
+            </form>
+
+            <!-- Weather result renders here from server -->
+            <% if (weather) { %>
+            <div class="weather-result show">
+                <div class="divider"></div>
+                <p class="city-name"><%= weather.city %>, <%= weather.country %></p>
+                <p class="weather-desc"><%= weather.description %></p>
+                <div class="temp-display"><%= weather.temp %>°C</div>
+                <div class="weather-grid">
+                    <div class="weather-stat">
+                        <p class="label">Feels Like</p>
+                        <p class="value"><%= weather.feelsLike %>°C</p>
+                    </div>
+                    <div class="weather-stat">
+                        <p class="label">Humidity</p>
+                        <p class="value"><%= weather.humidity %>%</p>
+                    </div>
+                    <div class="weather-stat">
+                        <p class="label">Wind Speed</p>
+                        <p class="value"><%= weather.wind %> km/h</p>
+                    </div>
+                    <div class="weather-stat">
+                        <p class="label">Visibility</p>
+                        <p class="value"><%= weather.visibility %> km</p>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        </div>
+    </div>
+</body>
 </html>
