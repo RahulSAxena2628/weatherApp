@@ -159,6 +159,28 @@ h1 {
     to   { opacity: 1; transform: scale(1); }
 }
 
+/* Font Awesome icon sizes */
+.fa-icon-location {
+    font-size: 3.5rem;
+    color: var(--primary);
+    filter: drop-shadow(0 0 16px rgba(79, 172, 254, 0.5));
+    margin-bottom: 0.4rem;
+}
+
+.fa-icon-loading {
+    font-size: 3.5rem;
+    color: var(--primary);
+    filter: drop-shadow(0 0 10px rgba(79, 172, 254, 0.4));
+}
+
+.parameter i {
+    font-size: 1.6rem;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
 /* Grant location */
 .grant-location-container img {
     filter: drop-shadow(0 0 16px rgba(79, 172, 254, 0.4));
